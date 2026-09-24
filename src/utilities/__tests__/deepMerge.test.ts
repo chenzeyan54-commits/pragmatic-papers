@@ -38,6 +38,26 @@ describe("deepMerge", () => {
 
     expect(target).toEqual({ nested: { value: 1 } })
   })
+
+  it("lets a null source value override an object on the target", () => {
+    expect(deepMerge({ admin: { hidden: true } }, { admin: null })).toEqual({ admin: null })
+  })
+
+  it("lets a null source value override a primitive on the target", () => {
+    expect(deepMerge({ label: "Link" }, { label: null })).toEqual({ label: null })
+  })
+
+  it("replaces a primitive target value with a source object", () => {
+    expect(deepMerge({ meta: "none" }, { meta: { description: "Summary" } })).toEqual({
+      meta: { description: "Summary" },
+    })
+  })
+
+  it("replaces a null target value with a source object", () => {
+    expect(deepMerge({ meta: null }, { meta: { description: "Summary" } })).toEqual({
+      meta: { description: "Summary" },
+    })
+  })
 })
 
 describe("isObject", () => {
@@ -46,5 +66,10 @@ describe("isObject", () => {
     expect(isObject([])).toBe(false)
     expect(isObject("value")).toBe(false)
     expect(isObject(42)).toBe(false)
+  })
+
+  it("rejects null and undefined", () => {
+    expect(isObject(null)).toBe(false)
+    expect(isObject(undefined)).toBe(false)
   })
 })
