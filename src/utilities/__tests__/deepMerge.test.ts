@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import deepMerge, { isObject } from "../deepMerge"
+
+import deepMerge, { isObject } from "@/utilities/deepMerge"
 
 describe("deepMerge", () => {
   it("merges nested objects while preserving untouched target keys", () => {
