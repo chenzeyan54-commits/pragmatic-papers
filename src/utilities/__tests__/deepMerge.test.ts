@@ -39,6 +39,25 @@ describe("deepMerge", () => {
     expect(target).toEqual({ nested: { value: 1 } })
   })
 
+  it("returns an equal copy when the source is empty", () => {
+    const target = { name: "link", admin: { hidden: false } }
+
+    const result = deepMerge(target, {})
+
+    expect(result).toEqual(target)
+    expect(result).not.toBe(target)
+  })
+
+  it("returns the source's contents when the target is empty", () => {
+    expect(deepMerge({}, { admin: { hidden: true } })).toEqual({ admin: { hidden: true } })
+  })
+
+  it("replaces a function on the target instead of merging into it", () => {
+    const required = (value: unknown): true | string => Boolean(value) || "Required"
+
+    expect(deepMerge({ validate: () => true }, { validate: required }).validate).toBe(required)
+  })
+
   it("lets a null source value override an object on the target", () => {
     expect(deepMerge({ admin: { hidden: true } }, { admin: null })).toEqual({ admin: null })
   })
